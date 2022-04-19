@@ -17,7 +17,7 @@ id int32          |      task varchar(512)  |         isComplete       |
 
 @Entity
 public class Todo {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     public long id;
 
     @ColumnInfo
