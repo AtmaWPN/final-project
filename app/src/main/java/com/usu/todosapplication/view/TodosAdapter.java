@@ -73,11 +73,8 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
         CheckBox checkBox = holder.itemView.findViewById(R.id.checkBox);
         checkBox.setChecked(todo.isComplete);
         checkBox.setText(todo.task);
-        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                eventListener.onClick(todo);
-            }
+        checkBox.setOnClickListener(view -> {
+            eventListener.onClick(todo);
         });
     }
 
