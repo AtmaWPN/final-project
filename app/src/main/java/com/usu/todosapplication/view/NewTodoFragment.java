@@ -39,7 +39,6 @@ public class NewTodoFragment extends Fragment {
             if (saving) {
                 button.setEnabled(false);
                 button.setText("Saving...");
-
             } else {
                 button.setEnabled(true);
                 button.setText("Save");
@@ -55,7 +54,6 @@ public class NewTodoFragment extends Fragment {
         view.findViewById(R.id.saveButton).setOnClickListener(button -> {
             EditText taskText = view.findViewById(R.id.task);
             viewModel.saveTodo(taskText.getText().toString());
-
         });
         return view;
     }

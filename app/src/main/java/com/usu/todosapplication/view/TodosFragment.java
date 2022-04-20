@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.usu.todosapplication.R;
@@ -39,6 +40,11 @@ public class TodosFragment extends Fragment {
             if (!message.equals("")) {
                 Toast.makeText(getContext(), message, Toast.LENGTH_LONG).show();
             }
+        });
+
+        view.findViewById(R.id.button0).setOnClickListener(button -> {
+            String taskText = ((Button) button.findViewById(R.id.button0)).getText().toString();
+            viewModel.saveTodo(taskText);
         });
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);

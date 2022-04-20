@@ -21,11 +21,13 @@ public class TodosViewModel extends ViewModel {
     TodosRepository repository;
     ObservableArrayList<Todo> todos = new ObservableArrayList<>();
     MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    MutableLiveData<Boolean> saveSuccess = new MutableLiveData<>();
     Handler handler = new Handler();
     @Inject
     public TodosViewModel(TodosRepository repository) {
         System.out.println("VM CREATED");
         this.repository = repository;
+        saveSuccess.setValue(false);
     }
 
     public MutableLiveData<String> getErrorMessage() {
@@ -49,7 +51,32 @@ public class TodosViewModel extends ViewModel {
             errorMessage.setValue(e.getMessage());
             handler.postDelayed(() -> {
                 errorMessage.setValue("");
-            }, 3000);
+            }, 0);
         });
+    }
+
+    public void saveTodo(String task) {
+
+        errorMessage.setValue("");
+//        saving.setValue(true);
+        saveSuccess.setValue(false);
+        new Thread(() -> {
+            if (task.isEmpty()) {
+                errorMessage.postValue("Task cannot be empty");
+            } else {
+                this.repository.saveTodo(task);
+                saveSuccess.postValue(true);
+            }
+//            saving.postValue(false);
+            this.getTodos();
+        }).start();
+        while (saveSuccess.getValue()) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        getTodos();
     }
 }
