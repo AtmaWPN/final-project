@@ -9,9 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.usu.todosapplication.model.Todo;
 import com.usu.todosapplication.repository.TodosRepository;
 
-import java.util.ArrayList;
-import java.util.Observable;
-
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -51,6 +48,9 @@ public class TodosViewModel extends ViewModel {
 
     public void toggleTodoStatus(Todo todo) {
         todo.isComplete = !todo.isComplete;
+        if (todo.isComplete) {
+            todo.completions++;
+        }
         this.repository.updateTodo(todo, (t) -> {
             int index = todos.indexOf(t);
             todos.set(index, t);
@@ -75,15 +75,11 @@ public class TodosViewModel extends ViewModel {
                 saveSuccess.postValue(true);
             }
 //            saving.postValue(false);
-            this.getTodos();
+            handler.post(this::getTodos);
         }).start();
-        while (saveSuccess.getValue()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        getTodos();
+    }
+
+    public void Delete(Todo todo){
+        repository.deleteTodo(todo);
     }
 }

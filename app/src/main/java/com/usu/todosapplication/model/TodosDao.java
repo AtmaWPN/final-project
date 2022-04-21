@@ -23,7 +23,7 @@ public interface TodosDao {
     @Query("SELECT * FROM todo WHERE completions > 0")
     public List<Todo> getCompletions();
 
-    @Query("SELECT * FROM todo WHERE task = :task")
+    @Query("SELECT * FROM todo WHERE lower(task) = lower(:task) LIMIT 1")
     public List<Todo> getMatchingTodos(String task);
 
 //    @Query("SELECT * FROM todo WHERE isComplete = 1")

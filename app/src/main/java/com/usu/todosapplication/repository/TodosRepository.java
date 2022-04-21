@@ -27,8 +27,14 @@ public class TodosRepository {
 
     private Handler handler = new Handler();
 
-    public class TodosRespositoryException extends RuntimeException {
-        public TodosRespositoryException(String message) {
+    public void deleteTodo(Todo todo) {
+        todo.isComplete = false;
+        todo.visible = false;
+        todo.quantity = 0;
+    }
+
+    public class TodosRepositoryException extends RuntimeException {
+        public TodosRepositoryException(String message) {
             super(message);
         }
     }
@@ -42,7 +48,7 @@ public class TodosRepository {
     }
 
     public interface ExceptionCallback {
-        public void call(TodosRespositoryException exception);
+        public void call(TodosRepositoryException exception);
     }
 
     @Inject
@@ -60,7 +66,7 @@ public class TodosRepository {
             Todo newTodo = new Todo();
             newTodo.task = task;
             newTodo.isComplete = false;
-            newTodo.id = db.getTodosDao().createTodo(newTodo);
+            db.getTodosDao().createTodo(newTodo);
             todos.add(newTodo);
         }
     }
@@ -86,7 +92,7 @@ public class TodosRepository {
                 handler.post(() -> {
                     callback.call(todo);
                 });
-            } catch (TodosRespositoryException e) {
+            } catch (TodosRepositoryException e) {
                 handler.post(() -> {
                     eCallback.call(e);
                 });

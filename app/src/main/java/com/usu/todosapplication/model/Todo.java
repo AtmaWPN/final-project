@@ -1,5 +1,7 @@
 package com.usu.todosapplication.model;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.pm.PermissionInfoCompat;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
@@ -17,10 +19,8 @@ id int32          |      task varchar(512)  |         isComplete       |
 
 @Entity
 public class Todo {
-    @PrimaryKey(autoGenerate = true)
-    public long id;
-
-    @ColumnInfo
+    @PrimaryKey
+    @NonNull
     public String task;
 
     @ColumnInfo
@@ -41,6 +41,6 @@ public class Todo {
     @Override
     public boolean equals(Object o) {
         Todo other = (Todo) o;
-        return other.id == this.id;
+        return other.task.equals(this.task);
     }
 }
