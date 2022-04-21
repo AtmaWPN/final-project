@@ -20,6 +20,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class TodosViewModel extends ViewModel {
     TodosRepository repository;
     ObservableArrayList<Todo> todos = new ObservableArrayList<>();
+    ObservableArrayList<Todo> quickAccess = new ObservableArrayList<>();
     MutableLiveData<String> errorMessage = new MutableLiveData<>();
     MutableLiveData<Boolean> saveSuccess = new MutableLiveData<>();
     Handler handler = new Handler();
@@ -40,6 +41,12 @@ public class TodosViewModel extends ViewModel {
             this.todos.addAll(todos);
         });
         return this.todos;
+    }
+
+    public ObservableArrayList<Todo> getQuickAccess() {
+        // todo: handle sorting by frequency and stuff
+
+        return this.quickAccess;
     }
 
     public void toggleTodoStatus(Todo todo) {

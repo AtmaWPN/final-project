@@ -27,6 +27,15 @@ public class Todo {
     public boolean isComplete;
 
     @ColumnInfo
+    public long completions;
+
+    @ColumnInfo
+    public long quantity;
+
+    @ColumnInfo
+    public boolean visible;
+
+    @ColumnInfo
     public long createdAt;
 
     @Override

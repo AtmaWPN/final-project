@@ -17,8 +17,14 @@ import java.util.List;
 @Dao
 public interface TodosDao {
 
-    @Query("SELECT * FROM todo")
+    @Query("SELECT * FROM todo WHERE visible = 1")
     public List<Todo> getTodos();
+
+    @Query("SELECT * FROM todo WHERE completions > 0")
+    public List<Todo> getCompletions();
+
+    @Query("SELECT * FROM todo WHERE task = :task")
+    public List<Todo> getMatchingTodos(String task);
 
 //    @Query("SELECT * FROM todo WHERE isComplete = 1")
 //    public List<Todo> getCompletedTodos();

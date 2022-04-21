@@ -11,6 +11,7 @@ import com.usu.todosapplication.model.AppDatabase;
 import com.usu.todosapplication.model.Todo;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -50,14 +51,18 @@ public class TodosRepository {
     }
 
     public void saveTodo(String task) {
-        // save it
-        Todo newTodo = new Todo();
-        newTodo.task = task;
-        newTodo.isComplete = false;
-        // TODO save to database
-        newTodo.id = db.getTodosDao().createTodo(newTodo);
-        todos.add(newTodo);
-        //notify of change
+        List<Todo> matchingTodos = db.getTodosDao().getMatchingTodos(task);
+        // if task already exists
+        if (matchingTodos.size() > 0) {
+            matchingTodos.get(0).quantity++;
+        } else {
+            // save it
+            Todo newTodo = new Todo();
+            newTodo.task = task;
+            newTodo.isComplete = false;
+            newTodo.id = db.getTodosDao().createTodo(newTodo);
+            todos.add(newTodo);
+        }
     }
 
     public void getTodos(TodosCallback callback) {
