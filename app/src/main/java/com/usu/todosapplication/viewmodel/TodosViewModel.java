@@ -9,9 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.usu.todosapplication.model.Todo;
 import com.usu.todosapplication.repository.TodosRepository;
 
-import java.util.ArrayList;
-import java.util.Observable;
-
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -52,4 +49,8 @@ public class TodosViewModel extends ViewModel {
             }, 3000);
         });
     }
+//    public void Delete(Todo todo){
+//        repository.deleteTodo();
+//    }
+
 }

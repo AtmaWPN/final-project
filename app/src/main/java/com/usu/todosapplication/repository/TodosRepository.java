@@ -26,6 +26,14 @@ public class TodosRepository {
 
     private Handler handler = new Handler();
 
+    public void deleteTodo(String task) {
+        Todo todo = new Todo();
+        todo.task = task;
+        todo.isComplete = true;
+        db.getTodosDao().deleteTodo(todo);
+        todos.remove(todo);
+    }
+
     public class TodosRespositoryException extends RuntimeException {
         public TodosRespositoryException(String message) {
             super(message);
@@ -75,11 +83,11 @@ public class TodosRepository {
     public void updateTodo(Todo todo, TodoCallback callback, ExceptionCallback eCallback) {
         new Thread(() -> {
             try {
-                throw new TodosRespositoryException("Could not connect to database");
-//                db.getTodosDao().updateTodo(todo);
-//                handler.post(() -> {
-//                    callback.call(todo);
-//                });
+//                throw new TodosRespositoryException("Could not connect to database");
+                db.getTodosDao().updateTodo(todo);
+                handler.post(() -> {
+                    callback.call(todo);
+                });
             } catch (TodosRespositoryException e) {
                 handler.post(() -> {
                     eCallback.call(e);
