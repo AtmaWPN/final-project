@@ -3,12 +3,14 @@ package com.usu.todosapplication.repository;
 import android.content.Context;
 import android.os.Handler;
 
-import androidx.databinding.ObservableArrayList;
+
+
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
+
 
 import com.usu.todosapplication.model.AppDatabase;
 import com.usu.todosapplication.model.Todo;
+
 
 import java.util.ArrayList;
 
@@ -26,13 +28,6 @@ public class TodosRepository {
 
     private Handler handler = new Handler();
 
-    public void deleteTodo(String task) {
-        Todo todo = new Todo();
-        todo.task = task;
-        todo.isComplete = true;
-        db.getTodosDao().deleteTodo(todo);
-        todos.remove(todo);
-    }
 
     public class TodosRespositoryException extends RuntimeException {
         public TodosRespositoryException(String message) {
@@ -66,6 +61,16 @@ public class TodosRepository {
         newTodo.id = db.getTodosDao().createTodo(newTodo);
         todos.add(newTodo);
     }
+    public void deleteTodo(Todo todo){
+        if (todo != null) {
+            new Thread(
+                    todos.isComplete = false
+                    todos.visible = false
+                    todos.quantity = 0
+            );
+            db.getTodosDao().deleteTodo(todo);
+        }
+    }
 
     public void getTodos(TodosCallback callback) {
         if (todos == null) {
@@ -77,7 +82,7 @@ public class TodosRepository {
             }).start();
         } else {
             callback.call(todos);
-        };
+        }
     }
 
     public void updateTodo(Todo todo, TodoCallback callback, ExceptionCallback eCallback) {

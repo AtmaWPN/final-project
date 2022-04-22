@@ -3,18 +3,17 @@ package com.usu.todosapplication.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.usu.todosapplication.R;
 import com.usu.todosapplication.model.Todo;
-
-import java.util.ArrayList;
 
 public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHolder> {
 
@@ -24,13 +23,16 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
 
     ObservableArrayList<Todo> todos;
     OnTodoClick eventListener;
-
+    OnTodoClick deleteListener;
     public TodosAdapter(
             ObservableArrayList<Todo> todos,
-            OnTodoClick eventListener
+            OnTodoClick eventListener,
+            OnTodoClick deleteListener
+
     ) {
         this.todos = todos;
         this.eventListener = eventListener;
+        this.deleteListener = deleteListener;
         todos.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Todo>>() {
             @Override
             public void onChanged(ObservableList<Todo> sender) {
@@ -74,6 +76,8 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
         checkBox.setChecked(todo.isComplete);
         checkBox.setText(todo.task);
         checkBox.setOnClickListener(view -> eventListener.onClick(todo));
+        FloatingActionButton deleteButton = holder.itemView.findViewById(R.id.deleteTodo);
+        deleteButton.setOnClickListener(view -> deleteListener.onClick(todo));
     }
 
     @Override
@@ -87,4 +91,5 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
             super(itemView);
         }
     }
+
 }

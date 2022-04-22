@@ -49,8 +49,8 @@ public class TodosViewModel extends ViewModel {
             }, 3000);
         });
     }
-//    public void Delete(Todo todo){
-//        repository.deleteTodo();
-//    }
+    public void Delete(Todo todo){
+        repository.deleteTodo(todo);
+    }
 
 }

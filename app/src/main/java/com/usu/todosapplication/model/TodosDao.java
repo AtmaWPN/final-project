@@ -34,4 +34,5 @@ public interface TodosDao {
 
     @Delete
     public void deleteTodo(Todo todo);
+
 }
