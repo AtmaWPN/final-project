@@ -59,7 +59,9 @@ public class TodosRepository {
         List<Todo> matchingTodos = db.getTodosDao().getMatchingTodos(task);
         // if task already exists
         if (matchingTodos.size() > 0) {
+            System.out.println("kill me");
             matchingTodos.get(0).visible = true;
+            db.getTodosDao().updateTodo(matchingTodos.get(0));
         } else {
             // save it
             Todo newTodo = new Todo();
@@ -103,16 +105,13 @@ public class TodosRepository {
     }
 
     public void getTodos(TodosCallback callback) {
-        if (todos == null) {
+
             new Thread(() -> {
                 todos = (ArrayList<Todo>) db.getTodosDao().getTodos();
                 handler.post(() -> {
                    callback.call(todos);
                 });
             }).start();
-        } else {
-            callback.call(todos);
-        }
     }
 
     public void updateTodo(Todo todo, TodoCallback callback, ExceptionCallback eCallback) {
