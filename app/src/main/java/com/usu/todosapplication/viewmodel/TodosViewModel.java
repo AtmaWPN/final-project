@@ -9,6 +9,9 @@ import androidx.lifecycle.ViewModel;
 import com.usu.todosapplication.model.Todo;
 import com.usu.todosapplication.repository.TodosRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -41,8 +44,10 @@ public class TodosViewModel extends ViewModel {
     }
 
     public ObservableArrayList<Todo> getQuickAccess() {
-        // todo: handle sorting by frequency and stuff
-
+        this.quickAccess.clear();
+        this.repository.getQuickAccess(quickAccess -> {
+            this.quickAccess.addAll(quickAccess);
+        });
         return this.quickAccess;
     }
 
@@ -56,9 +61,9 @@ public class TodosViewModel extends ViewModel {
             todos.set(index, t);
         }, e -> {
             errorMessage.setValue(e.getMessage());
-            handler.postDelayed(() -> {
+            handler.post(() -> {
                 errorMessage.setValue("");
-            }, 0);
+            });
         });
     }
 

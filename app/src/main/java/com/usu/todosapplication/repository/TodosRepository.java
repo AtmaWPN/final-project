@@ -24,14 +24,9 @@ public class TodosRepository {
     AppDatabase db;
 
     ArrayList<Todo> todos;
+    ArrayList<Todo> quickAccess;
 
     private Handler handler = new Handler();
-
-    public void deleteTodo(Todo todo) {
-        todo.isComplete = false;
-        todo.visible = false;
-        todo.quantity = 0;
-    }
 
     public class TodosRepositoryException extends RuntimeException {
         public TodosRepositoryException(String message) {
@@ -60,15 +55,37 @@ public class TodosRepository {
         List<Todo> matchingTodos = db.getTodosDao().getMatchingTodos(task);
         // if task already exists
         if (matchingTodos.size() > 0) {
-            matchingTodos.get(0).quantity++;
+            matchingTodos.get(0).visible = true;
         } else {
             // save it
             Todo newTodo = new Todo();
             newTodo.task = task;
             newTodo.isComplete = false;
+            newTodo.visible = true;
+            newTodo.completions = 0;
+//            newTodo.quantity = quantity;
             db.getTodosDao().createTodo(newTodo);
             todos.add(newTodo);
         }
+    }
+
+    public void deleteTodo(Todo todo) {
+        todo.isComplete = false;
+        todo.visible = false;
+        todo.quantity = 0;
+    }
+
+    public void getQuickAccess(TodosCallback callback) {
+        if (quickAccess == null) {
+            new Thread(() -> {
+                quickAccess = (ArrayList<Todo>) db.getTodosDao().getQuickAccess();
+                handler.post(() -> {
+                    callback.call(quickAccess);
+                });
+            }).start();
+        } else {
+            callback.call(quickAccess);
+        };
     }
 
     public void getTodos(TodosCallback callback) {
