@@ -95,12 +95,6 @@ public class TodosRepository {
             todo.visible = false;
             todo.quantity = 0;
             db.getTodosDao().updateTodo(todo);
-//            updateTodo(todo, (t) -> {
-//                int index = todos.indexOf(t);
-//                todos.remove(index);
-//            }, e -> {
-//                    System.out.println("Oh no something bad happened!");
-//            });
         }
     }
 

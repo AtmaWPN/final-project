@@ -7,8 +7,8 @@
 
     <EditText
         android:id="@+id/quantity"
-        android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_width="30dp"
+        android:layout_height="40dp"
         android:ems="10"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,20 +19,12 @@
         android:layout_width="0dp"
 
         android:layout_height="39dp"
+        android:layout_marginEnd="16dp"
         android:buttonTint="@color/blue"
         android:text="CheckBox"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/quantityText" />
-
-    <TextView
-        android:id="@+id/quantityText"
-        android:layout_width="wrap_content"
-        android:layout_height="39dp"
-        android:text="qty"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintEnd_toStartOf="@+id/deleteTodo"
+        app:layout_constraintStart_toEndOf="@+id/quantity" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/deleteTodo"
@@ -44,6 +36,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_delete_24" />
+        app:srcCompat="@drawable/ic_baseline_delete_24"
+
+        />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
