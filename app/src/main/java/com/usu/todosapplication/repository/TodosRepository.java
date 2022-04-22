@@ -13,6 +13,7 @@ import com.usu.todosapplication.model.Todo;
 
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -25,12 +26,14 @@ public class TodosRepository {
     AppDatabase db;
 
     ArrayList<Todo> todos;
+    ArrayList<Todo> quickAccess;
 
     private Handler handler = new Handler();
 
 
-    public class TodosRespositoryException extends RuntimeException {
-        public TodosRespositoryException(String message) {
+    public class TodosRepositoryException extends RuntimeException {
+        public TodosRepositoryException(String message) {
+
             super(message);
         }
     }
@@ -44,7 +47,7 @@ public class TodosRepository {
     }
 
     public interface ExceptionCallback {
-        public void call(TodosRespositoryException exception);
+        public void call(TodosRepositoryException exception);
     }
 
     @Inject
@@ -53,22 +56,49 @@ public class TodosRepository {
     }
 
     public void saveTodo(String task) {
-        // save it
-        Todo newTodo = new Todo();
-        newTodo.task = task;
-        newTodo.isComplete = false;
-        // TODO save to database
-        newTodo.id = db.getTodosDao().createTodo(newTodo);
-        todos.add(newTodo);
+        List<Todo> matchingTodos = db.getTodosDao().getMatchingTodos(task);
+        // if task already exists
+        if (matchingTodos.size() > 0) {
+            matchingTodos.get(0).visible = true;
+        } else {
+            // save it
+            Todo newTodo = new Todo();
+            newTodo.task = task;
+            newTodo.isComplete = false;
+            newTodo.visible = true;
+            newTodo.completions = 0;
+//            newTodo.quantity = quantity;
+            db.getTodosDao().createTodo(newTodo);
+            todos.add(newTodo);
+        }
     }
-    public void deleteTodo(Todo todo){
+
+
+
+    public void getQuickAccess(TodosCallback callback) {
+        if (quickAccess == null) {
+            new Thread(() -> {
+                quickAccess = (ArrayList<Todo>) db.getTodosDao().getQuickAccess();
+                handler.post(() -> {
+                    callback.call(quickAccess);
+                });
+            }).start();
+        } else {
+            callback.call(quickAccess);
+        };
+    }
+    public void deleteTodo(Todo todo) {
         if (todo != null) {
-            new Thread(
-                    todos.isComplete = false
-                    todos.visible = false
-                    todos.quantity = 0
-            );
-            db.getTodosDao().deleteTodo(todo);
+            todo.isComplete = false;
+            todo.visible = false;
+            todo.quantity = 0;
+            db.getTodosDao().updateTodo(todo);
+//            updateTodo(todo, (t) -> {
+//                int index = todos.indexOf(t);
+//                todos.remove(index);
+//            }, e -> {
+//                    System.out.println("Oh no something bad happened!");
+//            });
         }
     }
 
@@ -88,17 +118,16 @@ public class TodosRepository {
     public void updateTodo(Todo todo, TodoCallback callback, ExceptionCallback eCallback) {
         new Thread(() -> {
             try {
-//                throw new TodosRespositoryException("Could not connect to database");
+
                 db.getTodosDao().updateTodo(todo);
                 handler.post(() -> {
                     callback.call(todo);
                 });
-            } catch (TodosRespositoryException e) {
+            } catch (TodosRepositoryException e) {
                 handler.post(() -> {
                     eCallback.call(e);
                 });
             }
         }).start();
     }
-
 }

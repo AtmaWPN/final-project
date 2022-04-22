@@ -17,12 +17,15 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class TodosViewModel extends ViewModel {
     TodosRepository repository;
     ObservableArrayList<Todo> todos = new ObservableArrayList<>();
+    ObservableArrayList<Todo> quickAccess = new ObservableArrayList<>();
     MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    MutableLiveData<Boolean> saveSuccess = new MutableLiveData<>();
     Handler handler = new Handler();
     @Inject
     public TodosViewModel(TodosRepository repository) {
         System.out.println("VM CREATED");
         this.repository = repository;
+        saveSuccess.setValue(false);
     }
 
     public MutableLiveData<String> getErrorMessage() {
@@ -37,20 +40,52 @@ public class TodosViewModel extends ViewModel {
         return this.todos;
     }
 
+    public ObservableArrayList<Todo> getQuickAccess() {
+        this.quickAccess.clear();
+        this.repository.getQuickAccess(quickAccess -> {
+            this.quickAccess.addAll(quickAccess);
+        });
+        return this.quickAccess;
+    }
+
     public void toggleTodoStatus(Todo todo) {
         todo.isComplete = !todo.isComplete;
+        if (todo.isComplete) {
+            todo.completions++;
+        }
         this.repository.updateTodo(todo, (t) -> {
             int index = todos.indexOf(t);
             todos.set(index, t);
         }, e -> {
             errorMessage.setValue(e.getMessage());
-            handler.postDelayed(() -> {
+            handler.post(() -> {
                 errorMessage.setValue("");
-            }, 3000);
+            });
         });
     }
-    public void Delete(Todo todo){
-        repository.deleteTodo(todo);
+
+
+    public void saveTodo(String task) {
+
+        errorMessage.setValue("");
+//        saving.setValue(true);
+        saveSuccess.setValue(false);
+        new Thread(() -> {
+            if (task.isEmpty()) {
+                errorMessage.postValue("Task cannot be empty");
+            } else {
+                this.repository.saveTodo(task);
+                saveSuccess.postValue(true);
+            }
+//            saving.postValue(false);
+            handler.post(this::getTodos);
+        }).start();
     }
 
+    public void Delete(Todo todo){
+        new Thread(() -> {
+            repository.deleteTodo(todo);
+            handler.post(this::getTodos);
+        }).start();
+    }
 }

@@ -3,7 +3,7 @@ package com.usu.todosapplication.view;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
 import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
@@ -11,29 +11,25 @@ import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.usu.todosapplication.R;
 import com.usu.todosapplication.model.Todo;
 
-public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHolder> {
+public class QuickAccessAdapter extends RecyclerView.Adapter<QuickAccessAdapter.QuickAccessViewHolder> {
 
-    public interface OnTodoClick {
+    public interface OnQuickAccessClick {
         public void onClick(Todo todo);
     }
 
-    ObservableArrayList<Todo> todos;
-    OnTodoClick eventListener;
-    OnTodoClick deleteListener;
-    public TodosAdapter(
-            ObservableArrayList<Todo> todos,
-            OnTodoClick eventListener,
-            OnTodoClick deleteListener
+    ObservableArrayList<Todo> quickAccess;
+    QuickAccessAdapter.OnQuickAccessClick eventListener;
 
+    public QuickAccessAdapter(
+            ObservableArrayList<Todo> quickAccess,
+            QuickAccessAdapter.OnQuickAccessClick eventListener
     ) {
-        this.todos = todos;
+        this.quickAccess = quickAccess;
         this.eventListener = eventListener;
-        this.deleteListener = deleteListener;
-        todos.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Todo>>() {
+        quickAccess.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Todo>>() {
             @Override
             public void onChanged(ObservableList<Todo> sender) {
                 notifyDataSetChanged();
@@ -63,35 +59,28 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
 
     @NonNull
     @Override
-    public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new TodoViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false)
+    public QuickAccessViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new QuickAccessViewHolder(
+            LayoutInflater.from(parent.getContext()).inflate(R.layout.quick_access_item, parent, false)
         );
     }
 
     @Override
-    public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
-        Todo todo = todos.get(position);
-        CheckBox checkBox = holder.itemView.findViewById(R.id.checkBox);
-        checkBox.setChecked(todo.isComplete);
-        checkBox.setText(todo.task);
-        checkBox.setOnClickListener(view -> eventListener.onClick(todo));
-
-        FloatingActionButton deleteButton = holder.itemView.findViewById(R.id.deleteTodo);
-        deleteButton.setOnClickListener(view -> deleteListener.onClick(todo));
-
+    public void onBindViewHolder(@NonNull QuickAccessViewHolder holder, int position) {
+        Todo quickAccessButton = quickAccess.get(position);
+        Button button = holder.itemView.findViewById(R.id.button);
+        button.setText(quickAccessButton.task);
+        button.setOnClickListener(view -> eventListener.onClick(quickAccessButton));
     }
 
     @Override
     public int getItemCount() {
-        return todos.size();
+        return quickAccess.size();
     }
 
-    class TodoViewHolder extends RecyclerView.ViewHolder {
-
-        public TodoViewHolder(@NonNull View itemView) {
+    class QuickAccessViewHolder extends RecyclerView.ViewHolder {
+        public QuickAccessViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
-
 }
