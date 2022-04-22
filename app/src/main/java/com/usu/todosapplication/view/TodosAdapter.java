@@ -1,10 +1,13 @@
 package com.usu.todosapplication.view;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.CheckBox;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
@@ -28,7 +31,6 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
             ObservableArrayList<Todo> todos,
             OnTodoClick eventListener,
             OnTodoClick deleteListener
-
     ) {
         this.todos = todos;
         this.eventListener = eventListener;
@@ -65,7 +67,7 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
     @Override
     public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new TodoViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false)
+            LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false)
         );
     }
 
@@ -77,9 +79,12 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
         checkBox.setText(todo.task);
         checkBox.setOnClickListener(view -> eventListener.onClick(todo));
 
+        EditText quantityBox = holder.itemView.findViewById(R.id.quantity);
+        quantityBox.setText(Long.toString(todo.quantity));
+
         FloatingActionButton deleteButton = holder.itemView.findViewById(R.id.deleteTodo);
         deleteButton.setOnClickListener(view -> deleteListener.onClick(todo));
-
+        // TODO: add a textChangedListener to quantity
     }
 
     @Override
@@ -88,7 +93,6 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
     }
 
     class TodoViewHolder extends RecyclerView.ViewHolder {
-
         public TodoViewHolder(@NonNull View itemView) {
             super(itemView);
         }

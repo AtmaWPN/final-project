@@ -55,11 +55,10 @@ public class TodosRepository {
         db = Room.databaseBuilder(context, AppDatabase.class, "todos-database" ).build();
     }
 
-    public void saveTodo(String task) {
+    public void saveTodo(String task, int quantity) {
         List<Todo> matchingTodos = db.getTodosDao().getMatchingTodos(task);
         // if task already exists
         if (matchingTodos.size() > 0) {
-            System.out.println("kill me");
             matchingTodos.get(0).visible = true;
             db.getTodosDao().updateTodo(matchingTodos.get(0));
         } else {
@@ -69,7 +68,7 @@ public class TodosRepository {
             newTodo.isComplete = false;
             newTodo.visible = true;
             newTodo.completions = 0;
-//            newTodo.quantity = quantity;
+            newTodo.quantity = quantity;
             db.getTodosDao().createTodo(newTodo);
             todos.add(newTodo);
         }

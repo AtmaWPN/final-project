@@ -74,7 +74,7 @@ public class TodosViewModel extends ViewModel {
             if (task.isEmpty()) {
                 errorMessage.postValue("Task cannot be empty");
             } else {
-                this.repository.saveTodo(task);
+                this.repository.saveTodo(task, 1);
                 saveSuccess.postValue(true);
             }
 //            saving.postValue(false);
