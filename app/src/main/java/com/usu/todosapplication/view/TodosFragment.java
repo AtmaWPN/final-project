@@ -2,7 +2,6 @@ package com.usu.todosapplication.view;
 
 import android.os.Bundle;
 
-import androidx.databinding.ObservableArrayList;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
@@ -12,14 +11,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.usu.todosapplication.R;
-import com.usu.todosapplication.model.Todo;
 import com.usu.todosapplication.viewmodel.TodosViewModel;
-
-import java.util.ArrayList;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
@@ -47,8 +42,8 @@ public class TodosFragment extends Fragment {
         });
 
         RecyclerView recyclerView2 = view.findViewById(R.id.recyclerView2);
-        recyclerView2.setAdapter(new QuickAccessAdapter(viewModel.getQuickAccess(), (todo) -> {
-            viewModel.saveTodo(todo.task);
+        recyclerView2.setAdapter(new QuickAccessAdapter(viewModel.getQuickAccess(), (todo, i) -> {
+            viewModel.saveTodo(todo.task, i);
         }));
         recyclerView2.setLayoutManager(new LinearLayoutManager(getContext()));
 

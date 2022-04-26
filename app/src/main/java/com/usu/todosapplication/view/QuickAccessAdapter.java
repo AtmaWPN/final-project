@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
@@ -17,7 +16,7 @@ import com.usu.todosapplication.model.Todo;
 public class QuickAccessAdapter extends RecyclerView.Adapter<QuickAccessAdapter.QuickAccessViewHolder> {
 
     public interface OnQuickAccessClick {
-        public void onClick(Todo todo);
+        public void onClick(Todo todo, int i);
     }
 
     ObservableArrayList<Todo> quickAccess;
@@ -69,8 +68,10 @@ public class QuickAccessAdapter extends RecyclerView.Adapter<QuickAccessAdapter.
     public void onBindViewHolder(@NonNull QuickAccessViewHolder holder, int position) {
         Todo quickAccessButton = quickAccess.get(position);
         Button button = holder.itemView.findViewById(R.id.button);
+        Button bulkAdd = holder.itemView.findViewById(R.id.bulkAdd);
         button.setText(quickAccessButton.task);
-        button.setOnClickListener(view -> eventListener.onClick(quickAccessButton));
+        button.setOnClickListener(view -> eventListener.onClick(quickAccessButton, 1));
+        bulkAdd.setOnClickListener(view -> eventListener.onClick(quickAccessButton, 5));
     }
 
     @Override

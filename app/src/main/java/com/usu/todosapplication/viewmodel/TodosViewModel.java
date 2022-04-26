@@ -82,8 +82,7 @@ public class TodosViewModel extends ViewModel {
     }
 
 
-    public void saveTodo(String task) {
-
+    public void saveTodo(String task, int quantity) {
         errorMessage.setValue("");
 //        saving.setValue(true);
         saveSuccess.setValue(false);
@@ -91,7 +90,7 @@ public class TodosViewModel extends ViewModel {
             if (task.isEmpty()) {
                 errorMessage.postValue("Task cannot be empty");
             } else {
-                this.repository.saveTodo(task, 1);
+                this.repository.saveTodo(task, quantity);
                 saveSuccess.postValue(true);
             }
 //            saving.postValue(false);
