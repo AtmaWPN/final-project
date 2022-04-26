@@ -36,6 +36,7 @@ public class TodosViewModel extends ViewModel {
         this.todos.clear();
         this.repository.getTodos(todos -> {
             this.todos.addAll(todos);
+
         });
         return this.todos;
     }
