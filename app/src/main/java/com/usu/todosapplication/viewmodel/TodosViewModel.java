@@ -42,13 +42,7 @@ public class TodosViewModel extends ViewModel {
         });
         return this.todos;
     }
-    public ObservableArrayList<Todo> getQty(){
-        this.qty.clear();
-        this.repository.getQty(qty -> {
-            this.qty.addAll(qty);
-        });
-        return this.qty;
-    }
+
 
     public ObservableArrayList<Todo> getQuickAccess() {
         this.quickAccess.clear();
