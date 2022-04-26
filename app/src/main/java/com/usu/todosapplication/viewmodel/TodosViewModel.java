@@ -42,13 +42,7 @@ public class TodosViewModel extends ViewModel {
         });
         return this.todos;
     }
-    public ObservableArrayList<Todo> getQty(){
-        this.qty.clear();
-        this.repository.getQty(qty -> {
-            this.qty.addAll(qty);
-        });
-        return this.qty;
-    }
+
 
     public ObservableArrayList<Todo> getQuickAccess() {
         this.quickAccess.clear();
@@ -62,7 +56,20 @@ public class TodosViewModel extends ViewModel {
         todo.isComplete = !todo.isComplete;
         if (todo.isComplete) {
             todo.completions++;
+            getQuickAccess();
         }
+        this.repository.updateTodo(todo, (t) -> {
+            int index = todos.indexOf(t);
+            todos.set(index, t);
+        }, e -> {
+            errorMessage.setValue(e.getMessage());
+            handler.post(() -> {
+                errorMessage.setValue("");
+            });
+        });
+    }
+    public void updateQuantity(Todo todo, Long qty){
+        todo.quantity = qty;
         this.repository.updateTodo(todo, (t) -> {
             int index = todos.indexOf(t);
             todos.set(index, t);
