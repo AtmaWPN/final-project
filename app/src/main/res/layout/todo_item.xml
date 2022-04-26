@@ -5,32 +5,27 @@
     android:layout_width="match_parent"
     android:layout_height="39dp">
 
-    <EditText
-        android:id="@+id/quantity"
-        android:layout_width="30dp"
-        android:layout_height="40dp"
-        android:ems="10"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="0dp"
+        android:layout_width="292dp"
 
-        android:layout_height="39dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:buttonTint="@color/blue"
         android:text="CheckBox"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/deleteTodo"
-        app:layout_constraintStart_toEndOf="@+id/quantity" />
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@+id/textQty"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/deleteTodo"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginEnd="16dp"
+        android:layout_width="53dp"
+        android:layout_height="33dp"
+        android:layout_marginEnd="8dp"
         android:backgroundTint="#1976D2"
         android:clickable="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -39,5 +34,14 @@
         app:srcCompat="@drawable/ic_baseline_delete_24"
 
         />
+
+    <TextView
+        android:id="@+id/textQty"
+        android:layout_width="44dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

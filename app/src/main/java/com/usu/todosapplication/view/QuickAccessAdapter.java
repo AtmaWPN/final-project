@@ -25,7 +25,7 @@ public class QuickAccessAdapter extends RecyclerView.Adapter<QuickAccessAdapter.
 
     public QuickAccessAdapter(
             ObservableArrayList<Todo> quickAccess,
-            QuickAccessAdapter.OnQuickAccessClick eventListener
+            OnQuickAccessClick eventListener
     ) {
         this.quickAccess = quickAccess;
         this.eventListener = eventListener;

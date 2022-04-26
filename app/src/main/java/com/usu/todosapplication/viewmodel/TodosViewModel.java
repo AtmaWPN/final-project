@@ -18,8 +18,10 @@ public class TodosViewModel extends ViewModel {
     TodosRepository repository;
     ObservableArrayList<Todo> todos = new ObservableArrayList<>();
     ObservableArrayList<Todo> quickAccess = new ObservableArrayList<>();
+    ObservableArrayList<Todo> qty = new ObservableArrayList<>();
     MutableLiveData<String> errorMessage = new MutableLiveData<>();
     MutableLiveData<Boolean> saveSuccess = new MutableLiveData<>();
+
     Handler handler = new Handler();
     @Inject
     public TodosViewModel(TodosRepository repository) {
@@ -36,8 +38,16 @@ public class TodosViewModel extends ViewModel {
         this.todos.clear();
         this.repository.getTodos(todos -> {
             this.todos.addAll(todos);
+
         });
         return this.todos;
+    }
+    public ObservableArrayList<Todo> getQty(){
+        this.qty.clear();
+        this.repository.getQty(qty -> {
+            this.qty.addAll(qty);
+        });
+        return this.qty;
     }
 
     public ObservableArrayList<Todo> getQuickAccess() {

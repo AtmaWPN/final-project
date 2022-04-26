@@ -3,18 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/drawable/ic_baseline_add_shopping_cart_24.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/drawable/ic_baseline_delete_24.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/drawable/ic_baseline_delete_forever_24.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/drawable/ic_baseline_remove_shopping_cart_24.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/drawable/ic_outline_remove_shopping_cart_24.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/activity_main.xml" value="0.33" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/fragment_new_todo.xml" value="0.33263598326359833" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/fragment_todos_fragment.xml" value="0.33" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/quick_access_item.xml" value="0.1" />
-        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/todo_item.xml" value="0.33" />
+        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/activity_main.xml" value="0.26268115942028986" />
+        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/fragment_new_todo.xml" value="0.26268115942028986" />
+        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/fragment_todos_fragment.xml" value="0.26268115942028986" />
+        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/qty_item.xml" value="0.358695652173913" />
+        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/quick_access_item.xml" value="0.26268115942028986" />
+        <entry key="..\:/Users/ryan2/Downloads/final-project/app/src/main/res/layout/todo_item.xml" value="0.26268115942028986" />
       </map>
     </option>
   </component>

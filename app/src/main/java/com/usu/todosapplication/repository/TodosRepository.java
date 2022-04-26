@@ -27,6 +27,7 @@ public class TodosRepository {
 
     ArrayList<Todo> todos;
     ArrayList<Todo> quickAccess;
+    ArrayList<Todo> qty;
 
     private Handler handler = new Handler();
 
@@ -74,20 +75,25 @@ public class TodosRepository {
         }
     }
 
+    public void getQty(TodosCallback callback){
+        new Thread(() -> {
+            qty = (ArrayList<Todo>) db.getTodosDao().getQty();
+            handler.post(() ->{
+                callback.call(qty);
+            });
+        }).start();
 
+    }
 
     public void getQuickAccess(TodosCallback callback) {
-        if (quickAccess == null) {
             new Thread(() -> {
                 quickAccess = (ArrayList<Todo>) db.getTodosDao().getQuickAccess();
                 handler.post(() -> {
                     callback.call(quickAccess);
                 });
             }).start();
-        } else {
-            callback.call(quickAccess);
-        };
-    }
+        }
+
     public void deleteTodo(Todo todo) {
         if (todo != null) {
             todo.isComplete = false;

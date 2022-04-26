@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="ProjectModuleManager">
-    <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/820652782/TodosApplication.iml" filepath="$PROJECT_DIR$/.idea/modules/820652782/TodosApplication.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TodosApplication.app.iml" filepath="$PROJECT_DIR$/.idea/modules/TodosApplication.app.iml" />
-    </modules>
-  </component>
-</project>
