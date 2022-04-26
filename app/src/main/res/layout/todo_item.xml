@@ -7,16 +7,19 @@
 
     <CheckBox
         android:id="@+id/checkBox"
-        android:layout_width="340dp"
+        android:layout_width="292dp"
 
-        android:layout_height="39dp"
+        android:layout_height="38dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:buttonTint="@color/blue"
         android:text="CheckBox"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/deleteTodo"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.3"
+        app:layout_constraintStart_toEndOf="@+id/textQty"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/deleteTodo"
@@ -31,5 +34,14 @@
         app:srcCompat="@drawable/ic_baseline_delete_24"
 
         />
+
+    <TextView
+        android:id="@+id/textQty"
+        android:layout_width="44dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
