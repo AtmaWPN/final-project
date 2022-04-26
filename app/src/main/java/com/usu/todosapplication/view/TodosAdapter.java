@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
@@ -90,26 +91,8 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
         FloatingActionButton deleteButton = holder.itemView.findViewById(R.id.deleteTodo);
         deleteButton.setOnClickListener(view -> deleteListener.onClick(todo));
 
-        EditText quantityBox = holder.itemView.findViewById(R.id.quantity);
+        TextView quantityBox = holder.itemView.findViewById(R.id.quantity);
         quantityBox.setText(Long.toString(todo.quantity));
-
-        quantityBox.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                Long quantity = Long.parseLong(charSequence.toString());
-                changeListener.onClick(todo, quantity);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        });
     }
 
     @Override

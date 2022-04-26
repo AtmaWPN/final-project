@@ -59,7 +59,12 @@ public class TodosRepository {
         List<Todo> matchingTodos = db.getTodosDao().getMatchingTodos(task);
         // if task already exists
         if (matchingTodos.size() > 0) {
-            matchingTodos.get(0).visible = true;
+            if (matchingTodos.get(0).visible) {
+                matchingTodos.get(0).quantity++;
+            } else {
+                matchingTodos.get(0).visible = true;
+                matchingTodos.get(0).quantity = quantity;
+            }
             db.getTodosDao().updateTodo(matchingTodos.get(0));
         } else {
             // save it

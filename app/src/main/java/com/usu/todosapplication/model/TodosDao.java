@@ -20,7 +20,7 @@ public interface TodosDao {
     @Query("SELECT * FROM todo WHERE visible = 1")
     public List<Todo> getTodos();
 
-    @Query("SELECT * FROM todo ORDER BY completions DESC LIMIT 8")
+    @Query("SELECT * FROM todo ORDER BY completions DESC")
     public List<Todo> getQuickAccess();
 
     @Query("SELECT * FROM todo WHERE lower(task) = lower(:task) LIMIT 1")

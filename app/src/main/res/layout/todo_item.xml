@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ConstraintLayout"
     android:layout_width="match_parent"
     android:layout_height="39dp">
 
@@ -10,13 +11,11 @@
         android:layout_width="292dp"
 
         android:layout_height="38dp"
-        android:layout_marginStart="4dp"
         android:layout_marginEnd="8dp"
         android:buttonTint="@color/blue"
         android:text="CheckBox"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/deleteTodo"
-        app:layout_constraintStart_toEndOf="@+id/quantity"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
@@ -34,14 +33,14 @@
 
         />
 
-    <EditText
+    <TextView
         android:id="@+id/quantity"
-        android:layout_width="33dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="4dp"
-        android:ems="10"
-        android:inputType="number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toStartOf="@+id/checkBox"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
