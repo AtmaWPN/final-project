@@ -53,7 +53,7 @@ public class NewTodoFragment extends Fragment {
 
         view.findViewById(R.id.saveButton).setOnClickListener(button -> {
             EditText taskText = view.findViewById(R.id.task);
-            EditText quantity = view.findViewById(R.id.newQuantity);
+            EditText quantity = view.findViewById(R.id.newQty);
             try {
                 viewModel.saveTodo(taskText.getText().toString(), Integer.parseInt(quantity.getText().toString()));
             } catch (NumberFormatException e) {

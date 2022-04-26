@@ -24,13 +24,20 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
         public void onClick(Todo todo);
     }
 
+    public interface OnQtyChanged {
+        public void onChanged(Todo todo, Long qty);
+    }
+
     ObservableArrayList<Todo> todos;
     OnTodoClick eventListener;
     OnTodoClick deleteListener;
+    OnQtyChanged changeListener;
+
     public TodosAdapter(
             ObservableArrayList<Todo> todos,
             OnTodoClick eventListener,
-            OnTodoClick deleteListener
+            OnTodoClick deleteListener,
+            OnQtyChanged changeListener
     ) {
         this.todos = todos;
         this.eventListener = eventListener;
@@ -74,17 +81,35 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
         Todo todo = todos.get(position);
+
         CheckBox checkBox = holder.itemView.findViewById(R.id.checkBox);
         checkBox.setChecked(todo.isComplete);
         checkBox.setText(todo.task);
         checkBox.setOnClickListener(view -> eventListener.onClick(todo));
 
+        FloatingActionButton deleteButton = holder.itemView.findViewById(R.id.deleteTodo);
+        deleteButton.setOnClickListener(view -> deleteListener.onClick(todo));
+
         EditText quantityBox = holder.itemView.findViewById(R.id.quantity);
         quantityBox.setText(Long.toString(todo.quantity));
 
-        FloatingActionButton deleteButton = holder.itemView.findViewById(R.id.deleteTodo);
-        deleteButton.setOnClickListener(view -> deleteListener.onClick(todo));
-        // TODO: add a textChangedListener to quantity
+        quantityBox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                Long quantity = Long.parseLong(charSequence.toString());
+                changeListener.onClick(todo, quantity);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
     @Override

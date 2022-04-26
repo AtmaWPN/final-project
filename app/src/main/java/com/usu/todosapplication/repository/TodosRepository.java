@@ -86,13 +86,13 @@ public class TodosRepository {
     }
 
     public void getQuickAccess(TodosCallback callback) {
-            new Thread(() -> {
-                quickAccess = (ArrayList<Todo>) db.getTodosDao().getQuickAccess();
-                handler.post(() -> {
-                    callback.call(quickAccess);
-                });
-            }).start();
-        }
+        new Thread(() -> {
+            quickAccess = (ArrayList<Todo>) db.getTodosDao().getQuickAccess();
+            handler.post(() -> {
+                callback.call(quickAccess);
+            });
+        }).start();
+    }
 
     public void deleteTodo(Todo todo) {
         if (todo != null) {
@@ -116,7 +116,6 @@ public class TodosRepository {
     public void updateTodo(Todo todo, TodoCallback callback, ExceptionCallback eCallback) {
         new Thread(() -> {
             try {
-
                 db.getTodosDao().updateTodo(todo);
                 handler.post(() -> {
                     callback.call(todo);
