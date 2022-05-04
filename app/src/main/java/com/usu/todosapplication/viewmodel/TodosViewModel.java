@@ -9,9 +9,6 @@ import androidx.lifecycle.ViewModel;
 import com.usu.todosapplication.model.Todo;
 import com.usu.todosapplication.repository.TodosRepository;
 
-import java.util.ArrayList;
-import java.util.Observable;
-
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
@@ -20,8 +17,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 public class TodosViewModel extends ViewModel {
     TodosRepository repository;
     ObservableArrayList<Todo> todos = new ObservableArrayList<>();
+    ObservableArrayList<Todo> quickAccess = new ObservableArrayList<>();
+    ObservableArrayList<Todo> qty = new ObservableArrayList<>();
     MutableLiveData<String> errorMessage = new MutableLiveData<>();
     MutableLiveData<Boolean> saveSuccess = new MutableLiveData<>();
+
     Handler handler = new Handler();
     @Inject
     public TodosViewModel(TodosRepository repository) {
@@ -38,25 +38,51 @@ public class TodosViewModel extends ViewModel {
         this.todos.clear();
         this.repository.getTodos(todos -> {
             this.todos.addAll(todos);
+
         });
         return this.todos;
     }
 
+
+    public ObservableArrayList<Todo> getQuickAccess() {
+        this.quickAccess.clear();
+        this.repository.getQuickAccess(quickAccess -> {
+            this.quickAccess.addAll(quickAccess);
+        });
+        return this.quickAccess;
+    }
+
     public void toggleTodoStatus(Todo todo) {
         todo.isComplete = !todo.isComplete;
+        if (todo.isComplete) {
+            todo.completions++;
+            getQuickAccess();
+        }
         this.repository.updateTodo(todo, (t) -> {
             int index = todos.indexOf(t);
             todos.set(index, t);
         }, e -> {
             errorMessage.setValue(e.getMessage());
-            handler.postDelayed(() -> {
+            handler.post(() -> {
                 errorMessage.setValue("");
-            }, 0);
+            });
+        });
+    }
+    public void updateQuantity(Todo todo, Long qty){
+        todo.quantity = qty;
+        this.repository.updateTodo(todo, (t) -> {
+            int index = todos.indexOf(t);
+            todos.set(index, t);
+        }, e -> {
+            errorMessage.setValue(e.getMessage());
+            handler.post(() -> {
+                errorMessage.setValue("");
+            });
         });
     }
 
-    public void saveTodo(String task) {
 
+    public void saveTodo(String task, int quantity) {
         errorMessage.setValue("");
 //        saving.setValue(true);
         saveSuccess.setValue(false);
@@ -64,19 +90,18 @@ public class TodosViewModel extends ViewModel {
             if (task.isEmpty()) {
                 errorMessage.postValue("Task cannot be empty");
             } else {
-                this.repository.saveTodo(task);
+                this.repository.saveTodo(task, quantity);
                 saveSuccess.postValue(true);
             }
 //            saving.postValue(false);
-            this.getTodos();
+            handler.post(this::getTodos);
         }).start();
-        while (saveSuccess.getValue()) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        getTodos();
+    }
+
+    public void Delete(Todo todo){
+        new Thread(() -> {
+            repository.deleteTodo(todo);
+            handler.post(this::getTodos);
+        }).start();
     }
 }

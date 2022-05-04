@@ -17,8 +17,14 @@ import java.util.List;
 @Dao
 public interface TodosDao {
 
-    @Query("SELECT * FROM todo")
+    @Query("SELECT * FROM todo WHERE visible = 1")
     public List<Todo> getTodos();
+
+    @Query("SELECT * FROM todo ORDER BY completions DESC")
+    public List<Todo> getQuickAccess();
+
+    @Query("SELECT * FROM todo WHERE lower(task) = lower(:task) LIMIT 1")
+    public List<Todo> getMatchingTodos(String task);
 
 //    @Query("SELECT * FROM todo WHERE isComplete = 1")
 //    public List<Todo> getCompletedTodos();
@@ -34,4 +40,5 @@ public interface TodosDao {
 
     @Delete
     public void deleteTodo(Todo todo);
+
 }

@@ -1,20 +1,23 @@
 package com.usu.todosapplication.view;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.ObservableArrayList;
 import androidx.databinding.ObservableList;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.usu.todosapplication.R;
 import com.usu.todosapplication.model.Todo;
-
-import java.util.ArrayList;
 
 public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHolder> {
 
@@ -22,15 +25,24 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
         public void onClick(Todo todo);
     }
 
+    public interface OnQtyChanged {
+        public void onChanged(Todo todo, Long qty);
+    }
+
     ObservableArrayList<Todo> todos;
     OnTodoClick eventListener;
+    OnTodoClick deleteListener;
+    OnQtyChanged changeListener;
 
     public TodosAdapter(
             ObservableArrayList<Todo> todos,
-            OnTodoClick eventListener
+            OnTodoClick eventListener,
+            OnTodoClick deleteListener,
+            OnQtyChanged changeListener
     ) {
         this.todos = todos;
         this.eventListener = eventListener;
+        this.deleteListener = deleteListener;
         todos.addOnListChangedCallback(new ObservableList.OnListChangedCallback<ObservableList<Todo>>() {
             @Override
             public void onChanged(ObservableList<Todo> sender) {
@@ -63,19 +75,24 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
     @Override
     public TodoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new TodoViewHolder(
-                LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false)
+            LayoutInflater.from(parent.getContext()).inflate(R.layout.todo_item, parent, false)
         );
     }
 
     @Override
     public void onBindViewHolder(@NonNull TodoViewHolder holder, int position) {
         Todo todo = todos.get(position);
+
         CheckBox checkBox = holder.itemView.findViewById(R.id.checkBox);
         checkBox.setChecked(todo.isComplete);
         checkBox.setText(todo.task);
-        checkBox.setOnClickListener(view -> {
-            eventListener.onClick(todo);
-        });
+        checkBox.setOnClickListener(view -> eventListener.onClick(todo));
+
+        FloatingActionButton deleteButton = holder.itemView.findViewById(R.id.deleteTodo);
+        deleteButton.setOnClickListener(view -> deleteListener.onClick(todo));
+
+        TextView quantityBox = holder.itemView.findViewById(R.id.quantity);
+        quantityBox.setText(Long.toString(todo.quantity));
     }
 
     @Override
@@ -84,9 +101,9 @@ public class TodosAdapter extends RecyclerView.Adapter<TodosAdapter.TodoViewHold
     }
 
     class TodoViewHolder extends RecyclerView.ViewHolder {
-
         public TodoViewHolder(@NonNull View itemView) {
             super(itemView);
         }
     }
+
 }

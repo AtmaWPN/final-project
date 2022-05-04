@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.usu.todosapplication.R;
@@ -42,14 +41,17 @@ public class TodosFragment extends Fragment {
             }
         });
 
-        view.findViewById(R.id.button0).setOnClickListener(button -> {
-            String taskText = ((Button) button.findViewById(R.id.button0)).getText().toString();
-            viewModel.saveTodo(taskText);
-        });
+        RecyclerView recyclerView2 = view.findViewById(R.id.recyclerView2);
+        recyclerView2.setAdapter(new QuickAccessAdapter(viewModel.getQuickAccess(), (todo, i) -> {
+            viewModel.saveTodo(todo.task, i);
+        }));
+        recyclerView2.setLayoutManager(new LinearLayoutManager(getContext()));
 
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
-        recyclerView.setAdapter(new TodosAdapter(viewModel.getTodos(), (todo) -> {
-            viewModel.toggleTodoStatus(todo);
+        recyclerView.setAdapter(new TodosAdapter(viewModel.getTodos(),
+                (todo) -> {viewModel.toggleTodoStatus(todo);},
+                (todo) -> {viewModel.Delete(todo);},
+                (todo, qty) -> {viewModel.updateQuantity(todo, qty);
         }));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         return view;

@@ -3,14 +3,17 @@ package com.usu.todosapplication.repository;
 import android.content.Context;
 import android.os.Handler;
 
-import androidx.databinding.ObservableArrayList;
+
+
 import androidx.room.Room;
-import androidx.room.RoomDatabase;
+
 
 import com.usu.todosapplication.model.AppDatabase;
 import com.usu.todosapplication.model.Todo;
 
+
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,11 +26,14 @@ public class TodosRepository {
     AppDatabase db;
 
     ArrayList<Todo> todos;
+    ArrayList<Todo> quickAccess;
 
     private Handler handler = new Handler();
 
-    public class TodosRespositoryException extends RuntimeException {
-        public TodosRespositoryException(String message) {
+
+    public class TodosRepositoryException extends RuntimeException {
+        public TodosRepositoryException(String message) {
+
             super(message);
         }
     }
@@ -41,7 +47,7 @@ public class TodosRepository {
     }
 
     public interface ExceptionCallback {
-        public void call(TodosRespositoryException exception);
+        public void call(TodosRepositoryException exception);
     }
 
     @Inject
@@ -49,44 +55,71 @@ public class TodosRepository {
         db = Room.databaseBuilder(context, AppDatabase.class, "todos-database" ).build();
     }
 
-    public void saveTodo(String task) {
-        // save it
-        Todo newTodo = new Todo();
-        newTodo.task = task;
-        newTodo.isComplete = false;
-        // TODO save to database
-        newTodo.id = db.getTodosDao().createTodo(newTodo);
-        todos.add(newTodo);
-        //notify of change
+    public void saveTodo(String task, int quantity) {
+        List<Todo> matchingTodos = db.getTodosDao().getMatchingTodos(task);
+        // if task already exists
+        System.out.println(quantity);
+        if (matchingTodos.size() > 0) {
+            if (matchingTodos.get(0).visible) {
+                matchingTodos.get(0).quantity += quantity;
+            } else {
+                matchingTodos.get(0).visible = true;
+                matchingTodos.get(0).quantity = quantity;
+            }
+            db.getTodosDao().updateTodo(matchingTodos.get(0));
+        } else {
+            // save it
+            Todo newTodo = new Todo();
+            newTodo.task = task;
+            newTodo.isComplete = false;
+            newTodo.visible = true;
+            newTodo.completions = 0;
+            newTodo.quantity = quantity;
+            db.getTodosDao().createTodo(newTodo);
+            todos.add(newTodo);
+        }
+    }
+
+    public void getQuickAccess(TodosCallback callback) {
+        new Thread(() -> {
+            quickAccess = (ArrayList<Todo>) db.getTodosDao().getQuickAccess();
+            handler.post(() -> {
+                callback.call(quickAccess);
+            });
+        }).start();
+    }
+
+    public void deleteTodo(Todo todo) {
+        if (todo != null) {
+            todo.isComplete = false;
+            todo.visible = false;
+            todo.quantity = 0;
+            db.getTodosDao().updateTodo(todo);
+        }
     }
 
     public void getTodos(TodosCallback callback) {
-        if (todos == null) {
+
             new Thread(() -> {
                 todos = (ArrayList<Todo>) db.getTodosDao().getTodos();
                 handler.post(() -> {
                    callback.call(todos);
                 });
             }).start();
-        } else {
-            callback.call(todos);
-        };
     }
 
     public void updateTodo(Todo todo, TodoCallback callback, ExceptionCallback eCallback) {
         new Thread(() -> {
             try {
-//                throw new TodosRepositoryException("Could not connect to database");
                 db.getTodosDao().updateTodo(todo);
                 handler.post(() -> {
                     callback.call(todo);
                 });
-            } catch (TodosRespositoryException e) {
+            } catch (TodosRepositoryException e) {
                 handler.post(() -> {
                     eCallback.call(e);
                 });
             }
         }).start();
     }
-
 }

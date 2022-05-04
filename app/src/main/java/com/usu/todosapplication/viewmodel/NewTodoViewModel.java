@@ -36,7 +36,7 @@ public class NewTodoViewModel extends ViewModel {
         return saveSuccess;
     }
 
-    public void saveTodo(String task) {
+    public void saveTodo(String task, int quantity) {
         // check to make sure task is not empty
         errorMessage.setValue("");
         saving.setValue(true);
@@ -44,7 +44,7 @@ public class NewTodoViewModel extends ViewModel {
             if (task.isEmpty()) {
                 errorMessage.postValue("Task cannot be empty");
             } else {
-                this.repository.saveTodo(task);
+                this.repository.saveTodo(task, quantity);
                 saveSuccess.postValue(true);
             }
             saving.postValue(false);
